@@ -11,6 +11,7 @@ namespace TripMapperBL.Helpers
             CreateMap<User, UserDto>();
 
             CreateMap<Category, CategoryDto>();
+            CreateMap<CreateCategoryDto, Category>();
 
             CreateMap<Photo, PhotoDto>();
 
@@ -19,15 +20,14 @@ namespace TripMapperBL.Helpers
                 .ForMember(d => d.Photos, opt => opt.MapFrom(s => s.Photos));
 
             CreateMap<Pin, PinDto>()
-                .ForMember(d => d.Trip, opt => opt.MapFrom(s => s.Trip))
+                .ForMember(d => d.Trip, opt => opt.Ignore()) // pinDto has a reference to trip, so ignore it to avoid circular loop
                 .ForMember(d => d.Category, opt => opt.MapFrom(s => s.Category))
                 .ForMember(d => d.User, opt => opt.MapFrom(s => s.User))
                 .ForMember(d => d.Photos, opt => opt.MapFrom(s => s.Photos));
+
             CreateMap<CreatePinDto, Pin>();
-
-            CreateMap<Category, CategoryDto>().ReverseMap();
-            CreateMap<CreateCategoryDto, Category>();
-
+            CreateMap<CreateTripDto, Trip>();
+            CreateMap<UpdateTripDto, Trip>();
         }
     }
 }

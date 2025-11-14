@@ -24,9 +24,9 @@ namespace TripMapperBL.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<TripDto>> GetAllTripsAsync(int currentUserId)
+        public async Task<IEnumerable<TripDto>> GetAllTripsAsync(int currentUserId, string? title, DateOnly? dateFrom)
         {
-            var trips = await _uow.Trips.GetTripsForUserAsync(currentUserId);
+            var trips = await _uow.Trips.GetTripsForUserAsync(currentUserId, title, dateFrom);
             return _mapper.Map<IEnumerable<TripDto>>(trips);
         }
 

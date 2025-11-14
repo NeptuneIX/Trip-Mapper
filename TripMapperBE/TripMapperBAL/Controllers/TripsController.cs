@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -11,6 +12,7 @@ using TripMapperDB.Models;
 
 namespace TripMapper.Controllers
 {
+    //[Authorize]
     public class TripsController : ControllerBase
     {
         private readonly ITripService _tripService;
@@ -25,10 +27,10 @@ namespace TripMapper.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTrips()
+        public async Task<IActionResult> GetTrips(string title, DateOnly? dateFrom)
         {
             var userId = User.GetUserId();
-            var trips = await _tripService.GetAllTripsAsync(userId);
+            var trips = await _tripService.GetAllTripsAsync(userId, title, dateFrom);
             return Ok(trips);
         }
 

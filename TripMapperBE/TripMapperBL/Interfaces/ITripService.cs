@@ -9,7 +9,7 @@ namespace TripMapperBL.Interfaces
 {
     public interface ITripService
     {
-        Task<IEnumerable<TripDto>> GetAllTripsAsync(int currentUserId);
+        Task<IEnumerable<TripDto>> GetAllTripsAsync(int currentUserId, string? title, DateOnly? dateFrom);
         Task<TripDto?> GetTripByIdAsync(int id, int currentUserId);
         Task<TripDto?> CreateTripAsync(CreateTripDto dto, int currentUserId);
         Task<TripDto?> UpdateTripAsync(UpdateTripDto dto, int currentUserId);

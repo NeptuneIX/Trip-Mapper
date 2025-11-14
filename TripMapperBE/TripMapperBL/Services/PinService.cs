@@ -25,7 +25,7 @@ namespace TripMapperBL.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<PinDto>> GetAllPinsAsync(int currentUserId)
+        public async Task<IEnumerable<PinDto>> GetAllPinsAsync(int currentUserId, string? title, DateOnly? visitedFrom, DateOnly? createdFrom, string? category)
         {
             var pins = await _uow.Pins.Query()
                 .Where(x => x.UserId == currentUserId)
@@ -58,7 +58,6 @@ namespace TripMapperBL.Services
             {
                 // Get Country, City & State data from nominatim reverse geolocation API
 
-                // Better to change to IHttpClientFactory, but this works for now until in production
                 var httpClient = new HttpClient(); 
 
                 

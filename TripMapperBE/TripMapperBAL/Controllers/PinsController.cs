@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TripMapper.Controllers;
 using TripMapperAPI.Extensions;
@@ -9,6 +10,7 @@ using TripMapperDB.Models;
 
 namespace TripMapper.Controllers
 {
+    //[Authorize]
     public class PinsController : BaseApiController
     {
         private readonly IPinService _pinService;
@@ -21,10 +23,10 @@ namespace TripMapper.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPins()
+        public async Task<IActionResult> GetPins(string? title, DateOnly? visitedFrom, DateTime? createdFrom, string? category)
         {
             var userId = User.GetUserId();
-            var pins = await _pinService.GetAllPinsAsync(userId);
+            var pins = await _pinService.GetAllPinsAsync(userId, title, visitedFrom, createdFrom, category);
             return Ok(pins);
         }
 

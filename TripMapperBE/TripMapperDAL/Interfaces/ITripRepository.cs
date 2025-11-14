@@ -9,7 +9,7 @@ namespace TripMapperDAL.Interfaces
 {
     public interface ITripRepository : IGenericRepository<Trip> {
         Task<Trip?> GetByTitleAsync(string title, int userId);
-        Task<IEnumerable<Trip>> GetTripsForUserAsync(int userId);
+        Task<IEnumerable<Trip>> GetTripsForUserAsync(int userId, string? title, DateOnly? dateFrom);
         Task<Trip?> GetTripWithDetailsAsync(int id);
         void SetOriginalRowVersion(Trip trip, byte[] rowVersion);
         void Attach(Trip trip);

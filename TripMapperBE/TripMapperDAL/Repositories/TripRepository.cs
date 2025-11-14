@@ -26,13 +26,23 @@ namespace TripMapperDAL.Repositories
         }
 
 
-        public async Task<IEnumerable<Trip>> GetTripsForUserAsync(int userId)
+        public async Task<IEnumerable<Trip>> GetTripsForUserAsync(int userId, string? title, DateOnly? dateFrom)
         {
             return await _context.TripAccesses
                 .Where(x => x.UserId == userId)
                 .Select(x => x.Trip)
+                .Where(t =>
+                    // Title filter 
+                    (title == null || t.Title.ToLower().Contains(title.ToLower())) &&
+
+                    // Date filter 
+                    (!dateFrom.HasValue ||
+                        (t.DateFrom.HasValue && t.DateFrom.Value >= dateFrom.Value) ||
+                        t.DateVisited >= dateFrom.Value)
+                )
                 .ToListAsync();
         }
+
 
         public async Task<Trip?> GetTripWithDetailsAsync(int id)
         {
