@@ -1,24 +1,54 @@
-import logo from './logo.svg';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
+import { AppShell } from '@mantine/core';
+
+import Header from './components/layout/Header';
+import Footer from './components/layout/Footer';
+import Sidebar from './components/layout/Sidebar';
+
+import HomePage from './pages/HomePage';
+import TripsPage from './pages/TripsPage';
+import PinsPage from './pages/PinsPage';
+import CategoriesPage from './pages/CategoriesPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <AppShell
+        padding="md"
+        header={{ height: 60 }}     
+        navbar={{ width: 250 }}     
+        footer={{ height: 30 }}     
+      >
+        
+        <AppShell.Header>
+          <Header />
+        </AppShell.Header>
+
+        <AppShell.Navbar>
+          <Sidebar />
+        </AppShell.Navbar>
+
+        <AppShell.Main>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/trips" element={<TripsPage />} />
+            <Route path="/pins" element={<PinsPage />} />
+            <Route path="/categories" element={<CategoriesPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+          </Routes>
+        </AppShell.Main>
+
+        <AppShell.Footer>
+          <Footer />
+        </AppShell.Footer>
+
+      </AppShell>
+    </Router>
   );
 }
 
