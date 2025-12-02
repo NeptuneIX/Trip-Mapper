@@ -2,11 +2,13 @@ import React from 'react';
 import { Group, Anchor, Text, useMantineTheme, Box } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { Link } from 'react-router-dom';
-import { IconHome, IconMapPin, IconCategory, IconLogin } from '@tabler/icons-react';
+import { IconHome, IconMapPin, IconCategory, IconLogin, IconDoorEnter } from '@tabler/icons-react';
 
 const Header = () => {
   const small = useMediaQuery('(max-width: 768px)');
   const theme = useMantineTheme();
+  // Replace this with user authentication logic, probably with useContext instead of useState
+  const [user, setUser] = React.useState(null);
 
   return (
     <Box
@@ -19,8 +21,14 @@ const Header = () => {
         alignItems: 'center'
       }}
     >
-      <Group position="apart" w="100%">
-        
+      <Group
+        w="100%"
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}
+      >
         <Group spacing="sm">
           <Text fw={700}>Trip-Mapper</Text>
 
@@ -40,10 +48,18 @@ const Header = () => {
             </Group>
           )}
         </Group>
-        {/* Right side */}
-        <Anchor component={Link} to="/login" style={{ display: 'flex', alignItems: 'center', color: theme.colors.green[6] }}>
-          <IconLogin size={16} style={{ marginRight: 6 }} /> Login
-        </Anchor>
+
+
+        {user ? <Text backgroundColor={theme.colors.gray[6]}>Welcome, {user}</Text> :
+          <Group spacing="xs">
+            <Anchor component={Link} to="/login" style={{ display: 'flex', alignItems: 'center', color: theme.colors.green[6] }}>
+              <IconLogin size={16} style={{ marginRight: 6 }} /> Log in
+            </Anchor>
+            <Anchor component={Link} to="/register" style={{ display: 'flex', alignItems: 'center', color: theme.colors.green[6] }}>
+              <IconDoorEnter size={16} style={{ marginRight: 6 }} /> Register
+            </Anchor>
+          </Group>
+        }
       </Group>
     </Box>
   );
