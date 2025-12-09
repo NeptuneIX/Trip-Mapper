@@ -10,11 +10,23 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 });
 
-const MapMarker = ({ position, title = 'Pin' }) => {
+const MapMarker = ({ id, position, title = 'Pin' }) => {
+  function handleDoubleClick() {
+    alert("Hello");
+    // Todo 
+  }
+
   return (
-    <Marker position={position}>
+    <Marker
+      position={position}
+      eventHandlers={{
+        dblclick: handleDoubleClick
+      }}
+    >
       <Popup>{title}</Popup>
     </Marker>
+
+
   );
 };
 

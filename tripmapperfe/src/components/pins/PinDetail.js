@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Container,
   Card,
@@ -18,10 +19,12 @@ import {
   IconAlertCircle,
 } from '@tabler/icons-react';
 
-const PinDetail = ({ id }) => {
+const PinDetail = () => {
+  const { id } = useParams();
   const [pin, setPin] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const altImage = 'https://images.pexels.com/photos/68704/pexels-photo-68704.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
 
   useEffect(() => {
     const fetchPinDetails = async () => {
@@ -117,6 +120,7 @@ const PinDetail = ({ id }) => {
             <Card.Section>
               <Image
                 src={photo.url}
+                fallbackSrc={altImage}
                 alt={pin.title}
                 height={300}
                 fit="cover"

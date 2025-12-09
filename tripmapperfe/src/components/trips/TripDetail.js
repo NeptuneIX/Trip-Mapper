@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   Container,
   Card,
@@ -20,13 +20,16 @@ import {
   IconAlertCircle,
 } from '@tabler/icons-react';
 
-const TripDetail = ({ id }) => {
+const TripDetail = () => {
+  const { id } = useParams();
 
   // Todo: Fix pin navigation, as I need to decide the purpose of PinsPage & how to pass on data to it
   const navigate = useNavigate();
   const [trip, setTrip] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const altImageTrip = 'https://images.pexels.com/photos/8058392/pexels-photo-8058392.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
+  const altImagePin = 'https://images.pexels.com/photos/68704/pexels-photo-68704.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
 
   useEffect(() => {
     const fetchTripDetails = async () => {
@@ -138,6 +141,7 @@ const TripDetail = ({ id }) => {
                         <Card.Section>
                           <Image
                             src={photo.url}
+                            fallbackSrc={altImageTrip}
                             height={200}
                             fit="cover"
                           />
@@ -153,6 +157,7 @@ const TripDetail = ({ id }) => {
                       <Card.Section>
                         <Image
                           src={photo.url}
+                          fallbackSrc={altImageTrip}
                           height={200}
                           fit="cover"
                         />
@@ -239,7 +244,7 @@ const TripDetail = ({ id }) => {
                             <Image
                               key={photo.id}
                               src={photo.url}
-                              alt={pin.title}
+                              fallbackSrc={altImagePin}
                               height={150}
                               fit="cover"
                               radius="sm"

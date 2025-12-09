@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } f
 import { MapContainer, TileLayer, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Box, Button } from '@mantine/core';
-import MapMarker from './MapMarker'; // Assuming MapMarker component exists
+import MapMarker from './MapMarker'; 
 
 // fix marker icon paths for CRA and bundlers
 delete L.Icon.Default.prototype._getIconUrl;
@@ -139,10 +139,10 @@ const MapView = forwardRef(({ initialCenter = [51.5074, -0.1278], initialZoom = 
         />
         <ClickHandler onSetPreview={onSetPreview} />
         {markers.map((m) => (
-          <MapMarker key={m.id} position={m.position} title={m.title} />
+          <MapMarker key={m.id} id={m.id} position={m.position} title={m.title} />
         ))}
         {previewMarker && (
-          <MapMarker key={'preview'} position={previewMarker} title={'Preview pin'} />
+          <MapMarker key={'preview'} id={1} position={previewMarker} title={'Preview pin'} />
         )}
         {/* ensure recenter happens when viewCenter state changes */}
         <Recenter viewCenter={viewCenter} zoom={initialZoom} />
