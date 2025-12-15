@@ -30,11 +30,15 @@ namespace TripMapperBL.Services
 
             using var hmac = new HMACSHA512();
 
-            var user = new User
+        var user = new User
             {
                 Username = dto.Username.ToLower(),
                 PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(dto.Password)),
-                PasswordSalt = hmac.Key
+                PasswordSalt = hmac.Key,
+                KnownAs = dto.KnownAs,
+                Gender = dto.Gender,
+                City = dto.City,
+                Country = dto.Country
             };
 
             _uow.Users.Add(user);

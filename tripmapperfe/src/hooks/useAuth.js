@@ -1,25 +1,30 @@
 import { useState, useEffect } from 'react';
 import authService from '../services/authService';
+import showError from '../modules/showError';
 
 const useAuth = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          const userData = await authService.getCurrentUser();
-          setUser(userData);
-        } catch (err) {
-          setError(err.message);
-          localStorage.removeItem('token');
-        }
+  if (error) {
+      showError(error);
+  }
+  const fetchUser = async () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const userData = await authService.getCurrentUser();
+        setUser(userData);
+      } catch (err) {
+        setError(err.message);
+        localStorage.removeItem('token');
       }
-      setLoading(false);
-    };
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
 
     fetchUser();
   }, []);
@@ -29,7 +34,7 @@ const useAuth = () => {
     setError(null);
     try {
       const userData = await authService.login(username, password);
-      setUser(userData.user || userData);
+      fetchUser();
       return userData;
     } catch (err) {
       setError(err.response?.data?.message || err.message);
@@ -44,7 +49,7 @@ const useAuth = () => {
     setError(null);
     try {
       const response = await authService.register(userData);
-      setUser(response.user || response);
+      fetchUser();
       return response;
     } catch (err) {
       setError(err.response?.data?.message || err.message);
@@ -54,8 +59,8 @@ const useAuth = () => {
     }
   };
 
-  const logout = () => {
-    authService.logout();
+  const logout = async () => {
+    await authService.logout();
     setUser(null);
   };
 

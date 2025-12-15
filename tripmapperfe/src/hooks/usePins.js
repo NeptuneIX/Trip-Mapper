@@ -1,10 +1,15 @@
-import { useState, useEffect } from 'react';
-import pinService from '../services/pinService';
+import { useState, useEffect } from "react";
+import pinService from "../services/pinService";
+import showError from '../modules/showError';
 
 const usePins = () => {
   const [pins, setPins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  if (error) {
+    showError(error);
+  }
 
   const fetchPins = async () => {
     setLoading(true);
@@ -33,7 +38,7 @@ const usePins = () => {
       setLoading(false);
     }
   };
-  
+
   const deletePin = async (id) => {
     setLoading(true);
     setError(null);

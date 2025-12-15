@@ -1,11 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import categoryService from '../services/categoryService';
+import showError from '../modules/showError';
 
 const useCategories = () => {
   const [curCategory, setCurCategory] = useState(null);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  if (error) {
+    showError(error);
+  }
 
   const fetchCategories = async () => {
     setLoading(true);

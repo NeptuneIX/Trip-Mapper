@@ -1,10 +1,15 @@
-import { useState, useEffect } from 'react';
-import tripService from '../services/tripService';
+import { useState, useEffect } from "react";
+import tripService from "../services/tripService";
+import showError from '../modules/showError';
 
 const useTrips = () => {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  if (error) {
+    showError(error);
+  }
 
   const fetchTrips = async () => {
     setLoading(true);

@@ -8,8 +8,6 @@ import {
   ColorPicker,
   Group,
   Box,
-  Container,
-  Loader
 } from "@mantine/core";
 import { IconCategory, IconPalette } from '@tabler/icons-react';
 
@@ -47,15 +45,9 @@ const CategoryForm = ({handleSubmit, name, setName, color, setColor, loading }) 
               onChange={setColor}
             />
           </Group>
-          {loading ? (
-        <Container>
-          <Group justify="center">
-            <Loader />
-          </Group>
-        </Container>
-          ) : <Button type="submit" leftSection={<IconCategory size={16} />} loading={loading} disabled={loading}>
+          <Button type="submit" leftSection={<IconCategory size={16} />} loading={loading} disabled={loading}>
             Save
-          </Button>}
+          </Button>
           
         </Stack>
       </form>

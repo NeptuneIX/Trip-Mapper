@@ -19,6 +19,21 @@ namespace TripMapper
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Add CORS policy
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("ReactPolicy", policy =>
+                {
+                    policy
+                        .WithOrigins("http://localhost:3000") 
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials(); 
+                });
+            });
+
+
+
             // Connect SQL Server DB
             builder.Services.AddDbContext<TripMapperContext>(options =>
                 options.UseSqlServer(
@@ -94,6 +109,7 @@ namespace TripMapper
 
             var app = builder.Build();
 
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -101,6 +117,8 @@ namespace TripMapper
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("ReactPolicy");
 
             app.UseAuthorization();
 
