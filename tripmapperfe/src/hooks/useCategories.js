@@ -46,6 +46,7 @@ const useCategories = () => {
     try {
       const newCategory = await categoryService.create(categoryData);
       setCategories((prev) => [...prev, newCategory]);
+      showStatus('Category created successfully');
       return newCategory;
     } catch (err) {
       setError(err.response?.data?.message || err.message);
@@ -61,6 +62,7 @@ const useCategories = () => {
     try {
       await categoryService.delete(id);
       setCategories((prev) => prev.filter((cat) => cat.id !== id));
+      showStatus('Category deleted successfully');
     } catch (err) {
       setError(err.response?.data?.message || err.message);
       throw err;

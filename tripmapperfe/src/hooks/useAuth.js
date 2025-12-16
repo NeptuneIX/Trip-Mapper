@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import authService from '../services/authService';
 import showError from '../modules/showError';
+import showStatus from '../modules/showStatus';
 
 const useAuth = () => {
   const [user, setUser] = useState(null);
@@ -25,7 +26,6 @@ const useAuth = () => {
   };
 
   useEffect(() => {
-
     fetchUser();
   }, []);
 
@@ -35,6 +35,7 @@ const useAuth = () => {
     try {
       const userData = await authService.login(username, password);
       fetchUser();
+      showStatus('Login successful');
       return userData;
     } catch (err) {
       setError(err.response?.data?.message || err.message);
@@ -50,6 +51,7 @@ const useAuth = () => {
     try {
       const response = await authService.register(userData);
       fetchUser();
+      showStatus('Registration successful');
       return response;
     } catch (err) {
       setError(err.response?.data?.message || err.message);
@@ -61,6 +63,7 @@ const useAuth = () => {
 
   const logout = async () => {
     await authService.logout();
+    showStatus('Logged out successfully');
     setUser(null);
   };
 

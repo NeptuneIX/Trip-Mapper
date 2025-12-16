@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import usePins from '../../hooks/usePins';
 import {
   Container,
   Card,
@@ -24,23 +25,22 @@ import {
 const PinDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [pin, setPin] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const [deleting, setDeleting] = useState(false);
+
+  const {
+    pinDetails: pin,
+    loading,
+    fetchPinDetails,
+    deletePin,
+  } = usePins();
   const altImage = 'https://images.pexels.com/photos/68704/pexels-photo-68704.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
 
   const handleDelete = async () => {
     try {
       setDeleting(true);
-      const res = await fetch(`/api/pins/${id}`, { method: 'DELETE' });
-      if (!res.ok) {
-        throw new Error('Failed to delete pin');
-      }
-    } catch (e) {
-      // Fallback for dev without backend
-    } finally {
+      await deletePin(id);
+    }  finally {
       setDeleting(false);
       setDeleteModalOpened(false);
       navigate('/pins');
@@ -48,42 +48,24 @@ const PinDetail = () => {
   };
 
   useEffect(() => {
-    const fetchPinDetails = async () => {
-      try {
-        setLoading(true);
-        // Dummy backend call placeholder
-        const response = await fetch(`/api/pins/${id}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch pin details');
-        }
-        const data = await response.json();
-        setPin(data);
-        setError(null);
-      } catch (err) {
-        setError(err.message);
-        console.log(id);
-        // Dummy data for development
-        setPin({
-          id: id,
-          title: 'Sample Pin',
-          description: 'This is a sample pin description',
-          dateVisited: new Date('2025-12-05'),
-          categoryId: 1,
-          userId: 1,
-          category: { id: 1, name: 'Landmarks', color: '#FF5733' },
-          user: { id: 1, username: 'john_doe', email: 'john@example.com' },
-          photos: [{ id: 1, url: 'https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png' }],
-          trip: { id: 1, name: 'Summer Vacation' }
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
+    // Dummy data for development
+    // setPin({
+    //   id: id,
+    //   title: 'Sample Pin',
+    //   description: 'This is a sample pin description',
+    //   dateVisited: new Date('2025-12-05'),
+    //   categoryId: 1,
+    //   userId: 1,
+    //   category: { id: 1, name: 'Landmarks', color: '#FF5733' },
+    //   user: { id: 1, username: 'john_doe', email: 'john@example.com' },
+    //   photos: [{ id: 1, url: 'https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png' }],
+    //   trip: { id: 1, name: 'Summer Vacation' }
+    // });
 
     if (id) {
-      fetchPinDetails();
+      fetchPinDetails(id);
     } else {
-      // If no ID is provided, reset state or redirect to error page, as appropriate
+      showError('No pin ID provided');
     }
   }, [id]);
 
@@ -93,17 +75,6 @@ const PinDetail = () => {
         <Group justify="center">
           <Loader />
         </Group>
-      </Container>
-    );
-  }
-
-  // Can replace with proper error component or redirect
-  if (error && !pin) {
-    return (
-      <Container size="sm" py="xl">
-        <Alert icon={<IconAlertCircle size={16} />} title="Error" color="red">
-          {error}
-        </Alert>
       </Container>
     );
   }

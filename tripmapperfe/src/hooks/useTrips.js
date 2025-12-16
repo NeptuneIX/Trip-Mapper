@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import tripService from "../services/tripService";
 import showError from '../modules/showError';
+import showStatus from '../modules/showStatus';
 
 const useTrips = () => {
   const [trips, setTrips] = useState([]);
@@ -30,6 +31,7 @@ const useTrips = () => {
     try {
       const newTrip = await tripService.create(tripData);
       setTrips((prev) => [...prev, newTrip]);
+      showStatus('Trip created successfully');
       return newTrip;
     } catch (err) {
       setError(err.response?.data?.message || err.message);
@@ -45,6 +47,7 @@ const useTrips = () => {
     try {
       const updated = await tripService.update(id, tripData);
       setTrips((prev) => prev.map((trip) => (trip.id === id ? updated : trip)));
+      showStatus('Trip updated successfully');
       return updated;
     } catch (err) {
       setError(err.response?.data?.message || err.message);
@@ -60,6 +63,7 @@ const useTrips = () => {
     try {
       await tripService.delete(id);
       setTrips((prev) => prev.filter((trip) => trip.id !== id));
+      showStatus('Trip deleted successfully');
     } catch (err) {
       setError(err.response?.data?.message || err.message);
       throw err;

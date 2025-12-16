@@ -2,17 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { Button, Flex, Group, TextInput, Textarea, Select, Stack, Card, Title, FileInput, Image, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconUpload, IconX } from '@tabler/icons-react';
+import usePins from '../../hooks/usePins';
+import useCategories from '../../hooks/useCategories';
+import showError from '../../modules/showError';
+import { useNavigate } from 'react-router-dom';
 
-const categories = [
-  { value: 'Food', label: 'Food' },
-  { value: 'Landmarks', label: 'Landmarks' },
-  { value: 'Nature', label: 'Nature' },
-  { value: 'Other', label: 'Other' },
-];
+// const categories = [
+//   { value: 'Food', label: 'Food' },
+//   { value: 'Landmarks', label: 'Landmarks' },
+//   { value: 'Nature', label: 'Nature' },
+//   { value: 'Other', label: 'Other' },
+// ];
 
-const PinForm = ({ onSubmit, initialPin = null, isLoading = false }) => {
+const PinForm = ({ initialPin = null }) => {
+  const navigate = useNavigate();
   const [photoPreview, setPhotoPreview] = useState(null);
   const [photoFile, setPhotoFile] = useState(null);
+  const {categories} = useCategories();
+  const {
+    loading,
+    createPin,
+  } = usePins();
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -22,6 +32,8 @@ const PinForm = ({ onSubmit, initialPin = null, isLoading = false }) => {
       dateVisited: initialPin?.dateVisited ? new Date(initialPin.dateVisited).toISOString().split('T')[0] : '',
       categoryId: initialPin?.category?.id?.toString() || '',
       tripId: initialPin?.trip?.id?.toString() || '',
+      longitude: initialPin?.longitude || '',
+      latitude: initialPin?.latitude || '',
       photo: null,
     },
 
@@ -82,12 +94,19 @@ const PinForm = ({ onSubmit, initialPin = null, isLoading = false }) => {
     form.setFieldValue('photo', null);
   };
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     const formData = new FormData();
     formData.append('title', values.title);
     formData.append('description', values.description || '');
     formData.append('dateVisited', values.dateVisited || '');
     formData.append('categoryId', values.categoryId);
+    formData.append('longitude', values.longitude);
+    formData.append('latitude', values.latitude);
+
+    if(formData.get('longitude') === '' || formData.get('latitude') === '') {
+      showError('Longitude and Latitude are required.');
+      return;
+    }
     if (values.tripId) {
       formData.append('tripId', values.tripId);
     }
@@ -96,23 +115,25 @@ const PinForm = ({ onSubmit, initialPin = null, isLoading = false }) => {
     }
 
     // Dummy backend call placeholder
-    fetch(`/api/pins${initialPin ? `/${initialPin.id}` : ''}`, {
-      method: initialPin ? 'PUT' : 'POST',
-      body: formData,
-    })
-      .then(response => {
-        if (!response.ok) throw new Error('Failed to save pin');
-        return response.json();
-      })
-      .then(data => {
-        console.log('Pin saved:', data);
-        if (onSubmit) onSubmit(data);
-      })
-      .catch(err => {
-        console.error('Error saving pin:', err);
-        // Fallback: just call onSubmit with form values
-        if (onSubmit) onSubmit(values);
-      });
+    // fetch(`/api/pins${initialPin ? `/${initialPin.id}` : ''}`, {
+    //   method: initialPin ? 'PUT' : 'POST',
+    //   body: formData,
+    // })
+    //   .then(response => {
+    //     if (!response.ok) throw new Error('Failed to save pin');
+    //     return response.json();
+    //   })
+    //   .then(data => {
+    //     console.log('Pin saved:', data);
+    //     if (onSubmit) onSubmit(data);
+    //   })
+    //   .catch(err => {
+    //     console.error('Error saving pin:', err);
+    //     // Fallback: just call onSubmit with form values
+    //     if (onSubmit) onSubmit(values);
+    //   });
+    await createPin(formData);
+    navigate('/pins');
   };
 
   return (
@@ -146,7 +167,7 @@ const PinForm = ({ onSubmit, initialPin = null, isLoading = false }) => {
                 withAsterisk
                 label="Category"
                 placeholder="Select a category"
-                data={categories}
+                data={categories.map(cat => ({ value: cat.id.toString(), label: cat.name }))}
                 key={form.key('categoryId')}
                 {...form.getInputProps('categoryId')}
               />
@@ -189,7 +210,7 @@ const PinForm = ({ onSubmit, initialPin = null, isLoading = false }) => {
 
               {/* Submit Button */}
               <Group position="center" mt="md">
-                <Button type="submit" loading={isLoading}>
+                <Button type="submit" loading={loading} disabled={loading}>
                   {initialPin ? 'Update Pin' : 'Create Pin'}
                 </Button>
               </Group>

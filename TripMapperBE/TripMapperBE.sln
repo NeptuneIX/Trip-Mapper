@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36603.0
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11205.157 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripMapper", "TripMapper\TripMapper.csproj", "{4CFC5411-2AC3-4950-9DA2-C43B0B243F43}"
 EndProject
@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripMapperAPI", "TripMapper
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "tripmapperfe", "..\tripmapperfe\", "{AE626C76-B5B7-E72A-C865-1CB8ABB03C8F}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_53516"
 		Debug.AspNetCompiler.PhysicalPath = "..\tripmapperfe\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_53516\"

@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Box, Button } from '@mantine/core';
 import MapMarker from './MapMarker'; 
+import usePins from '../../hooks/usePins';
 
 // fix marker icon paths for CRA and bundlers
 delete L.Icon.Default.prototype._getIconUrl;
@@ -46,6 +47,7 @@ const MapView = forwardRef(({ initialCenter = [51.5074, -0.1278], initialZoom = 
   const [markers, setMarkers] = useState([
     { id: 1, position: initialCenter, title: 'Default marker' }
   ]);
+  // const {pins: markers } = usePins();
   const [previewMarker, setPreviewMarker] = useState(null);
 
   const [permissionState, setPermissionState] = useState(null);

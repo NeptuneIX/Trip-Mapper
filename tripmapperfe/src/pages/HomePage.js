@@ -2,9 +2,19 @@ import React, { useRef } from 'react';
 import { Container, Title, Text, Button, Group } from '@mantine/core';
 import MapView from '../components/map/MapView';
 import { useNavigate } from 'react-router-dom';
+import usePins from '../hooks/usePins';
 
 const HomePage = () => {
 	const navigate = useNavigate();
+	const {
+		pins,
+		loading,
+		error,
+		fetchPins,
+		createPin,
+		updatePin,
+		deletePin,
+	} = usePins()
 	const mapRef = useRef(null);
 	return (
 		<Container size="md" style={{ paddingTop: 24 }}>
@@ -17,9 +27,12 @@ const HomePage = () => {
 				<Button onClick={() => {
 					if (mapRef.current) {
 						// Sample call to addPinFromPreview; we pass sample dto, in real app this would come from a form
-						const newPin = mapRef.current.addPinFromPreview({ title: 'Pin from preview', description: 'Created from preview' });
+						const previewPin = { 'longitude': mapRef.current.previewMarker[1], 'latitude': mapRef.current.previewMarker[0] };
+						
+
+						// const newPin = mapRef.current.addPinFromPreview({ title: 'Pin from preview', description: 'Created from preview' });
 						console.log('Created pin', newPin);
-						navigate('/pins/create');
+						navigate('/pins/create',  { state: { initialPin: previewPin } });
 					}
 				}}>Create pin from preview</Button>
 			</Group>

@@ -2,7 +2,6 @@ import React from "react";
 import { Container, Box, Title, Grid } from "@mantine/core";
 import { IconMapPin } from "@tabler/icons-react";
 import PinList from "../components/pins/PinList";
-import PinForm from "../components/pins/PinForm";
 
 const PinsPage = () => (
   <Container size="lg" py="md">

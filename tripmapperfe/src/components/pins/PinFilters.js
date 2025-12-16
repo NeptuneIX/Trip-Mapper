@@ -2,20 +2,15 @@ import React, { useState } from 'react';
 import { Group, TextInput, Select, Button, Flex } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 
-const categories = [
-  { value: 'Food', label: 'Food' },
-  { value: 'Landmarks', label: 'Landmarks' },
-  { value: 'Nature', label: 'Nature' },
-  { value: 'Other', label: 'Other' },
-];
-
-const PinFilters = ({ onSearch, initialFilters = {} }) => {
+const PinFilters = ({ onSearch, initialFilters = {}, categories }) => {
   const [query, setQuery] = useState(initialFilters.query || '');
   const [category, setCategory] = useState(initialFilters.category || null);
+  const [dateFrom, setDateFrom] = useState(initialFilters.dateFrom || '');
+  const [dateTo, setDateTo] = useState(initialFilters.dateTo || '');
 
   const handleSubmit = (e) => {
     e?.preventDefault();
-    onSearch({ query: query.trim(), category });
+    onSearch({ query: query.trim(), category, dateFrom, dateTo });
   };
 
   return (
@@ -28,6 +23,7 @@ const PinFilters = ({ onSearch, initialFilters = {} }) => {
             sx={{ flex: 1 }}
           />
 
+
           <Select
             data={categories}
             placeholder="Category"
@@ -36,6 +32,27 @@ const PinFilters = ({ onSearch, initialFilters = {} }) => {
             clearable
             sx={{ width: 180 }}
           />
+
+          {/* Place under the other filters later */}
+          <Group>
+
+            <TextInput
+              type="date"
+              label="From Date"
+              placeholder="Start date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.currentTarget.value)}
+              sx={{ flex: 1 }}
+            />
+            <TextInput
+              type="date"
+              label="To Date"
+              placeholder="End date"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.currentTarget.value)}
+              sx={{ flex: 1 }}
+            />
+          </Group>
 
           <Button type="submit" leftSection={<IconSearch size={16} />}>
             Search
